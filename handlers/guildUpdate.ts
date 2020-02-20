@@ -47,9 +47,19 @@ export async function handleGuildUpdateEvent(client: Client, oldGuild: Guild, ne
     if (oldGuild.region !== newGuild.region) {
         client.emit('guildRegionUpdate', newGuild, oldGuild.region, newGuild.region);
     }
-    // If the guild add a banner
-    if (!oldGuild.banner && newGuild.banner) {
-        client.emit('guildBannerUpdate', oldGuild, newGuild);
+     /**
+     * @event guildBannerUpdate
+     * @description Emitted when a guild change his banner.
+     * @param {DJS:Guild} guild The guild whose banner has changed.
+     * @param {string} oldRegion The old guild banner.
+     * @param {string} newRegion The new guild banner.
+     * @example
+     * client.on("guildBannerUpdate", (guild, oldBanner, newBanner) => {
+     *   console.log(guild.name+" region is now "+newRegion);
+     * });
+     */
+    if (!oldGuild.banner && newGuild.banner || oldGuild.banner !== newGuild.banner) {
+        client.emit('guildBannerUpdate', newGuild,oldGuild.banner, newGuild.banner);
     }
     // If the guild add an afkChannel
     if (!oldGuild.afkChannel && newGuild.afkChannel) {
